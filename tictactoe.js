@@ -1,0 +1,79 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const _ = require("underscore");
+const POSITION = [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]];
+var StatusGame;
+(function (StatusGame) {
+    StatusGame["win"] = "win";
+    StatusGame["draw"] = "draw";
+    StatusGame["loss"] = "loss";
+})(StatusGame = exports.StatusGame || (exports.StatusGame = {}));
+var Player;
+(function (Player) {
+    Player[Player["X"] = 1] = "X";
+    Player[Player["O"] = 0] = "O";
+})(Player = exports.Player || (exports.Player = {}));
+class TicTacToe {
+    constructor() {
+        this.board = [[-1, -1, -1],
+            [-1, -1, -1],
+            [-1, -1, -1]];
+    }
+    play(positions, player) {
+        for (let i = 8; i >= 0; i--) {
+            var line = POSITION[positions[i].index][0];
+            var column = POSITION[positions[i].index][1];
+            if (this.board[line][column] != -1)
+                continue;
+            this.board[line][column] = player;
+            return { move: positions[i].index, status: this.getStatus() };
+        }
+    }
+    getStatus() {
+        if (this.board[0][0] != -1 && this.board[0][0] == this.board[0][1] && this.board[0][0] == this.board[0][2])
+            return StatusGame.win;
+        if (this.board[0][0] != -1 && this.board[0][0] == this.board[1][0] && this.board[0][0] == this.board[2][0])
+            return StatusGame.win;
+        if (this.board[0][0] != -1 && this.board[0][0] == this.board[1][1] && this.board[0][0] == this.board[2][2])
+            return StatusGame.win;
+        if (this.board[1][0] != -1 && this.board[1][0] == this.board[1][1] && this.board[1][0] == this.board[1][2])
+            return StatusGame.win;
+        if (this.board[2][0] != -1 && this.board[2][0] == this.board[2][1] && this.board[2][0] == this.board[2][2])
+            return StatusGame.win;
+        if (this.board[0][1] != -1 && this.board[0][1] == this.board[1][1] && this.board[0][1] == this.board[2][1])
+            return StatusGame.win;
+        if (this.board[0][2] != -1 && this.board[0][2] == this.board[1][2] && this.board[0][2] == this.board[2][2])
+            return StatusGame.win;
+        if (this.board[0][2] != -1 && this.board[0][2] == this.board[1][1] && this.board[0][2] == this.board[2][0])
+            return StatusGame.win;
+        return StatusGame.draw;
+    }
+    getBoard() {
+        return _.flatten(this.board);
+    }
+    printBoard() {
+        let prettyBoard = this.board.map(row => {
+            let prettyRow = [];
+            row.forEach(elem => {
+                if (elem == -1)
+                    prettyRow.push('_');
+                if (elem == 1)
+                    prettyRow.push('x');
+                if (elem == 0)
+                    prettyRow.push('o');
+            });
+            return prettyRow;
+        });
+        console.log(`${prettyBoard[0]}\n${prettyBoard[1]}\n${prettyBoard[2]}`);
+    }
+}
+exports.TicTacToe = TicTacToe;
+// function main() {
+//     var ticTacToe = new TicTacToe;
+//     console.log(ticTacToe.play(0, 0, Player.O))
+//     console.log(ticTacToe.play(1, 0, Player.O))
+//     console.log(ticTacToe.play(2, 2, Player.X))
+//     console.log(ticTacToe.play(2, 0, Player.O))
+// }
+//main(); 
+//# sourceMappingURL=tictactoe.js.map
