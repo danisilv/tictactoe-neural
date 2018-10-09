@@ -20,9 +20,7 @@ class Evolution {
     }
     initialize() {
         return __awaiter(this, void 0, void 0, function* () {
-            let G1;
-            let G2;
-            yield this.genetic.createFirstGeneration(G1, G2);
+            yield this.genetic.createFirstGeneration();
             this.generations = 500;
         });
     }
@@ -72,7 +70,7 @@ class Evolution {
             players[1].isWinner = false;
             console.log(`\n---- ${players[0].name} VS ${players[1].name} -------`);
             for (let i = 0; i < 9; i++) {
-                let move = yield players[i % 2].predict(this.ticTacToe.getBoard());
+                let move = yield players[i % 2].predict(this.ticTacToe.getBoard(players[i % 2].nickname));
                 let status = yield this.ticTacToe.play(move, players[i % 2].nickname);
                 if (status.status == tictactoe_1.StatusGame.win)
                     console.log(players[i % 2].name + ' Play:' + status.move + ' [' + players[i % 2].nickname + '] ==> ' + status.status);

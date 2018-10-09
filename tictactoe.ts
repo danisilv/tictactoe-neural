@@ -14,11 +14,12 @@ export enum Player {
     O = 0
 }
 
+const EMPTY = 0.5;
 export class TicTacToe {
     public board =
-        [[-1, -1, -1],
-        [-1, -1, -1],
-        [-1, -1, -1]]
+        [[EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY]]
 
 
 
@@ -28,7 +29,7 @@ export class TicTacToe {
             var line = POSITION[positions[i].index][0];
             var column = POSITION[positions[i].index][1];
 
-            if (this.board[line][column] != -1)
+            if (this.board[line][column] != EMPTY)
                 continue;
 
             this.board[line][column] = player;
@@ -40,30 +41,43 @@ export class TicTacToe {
 
     public getStatus() {
 
-        if (this.board[0][0] != -1 && this.board[0][0] == this.board[0][1] && this.board[0][0] == this.board[0][2]) return StatusGame.win;
-        if (this.board[0][0] != -1 && this.board[0][0] == this.board[1][0] && this.board[0][0] == this.board[2][0]) return StatusGame.win;
-        if (this.board[0][0] != -1 && this.board[0][0] == this.board[1][1] && this.board[0][0] == this.board[2][2]) return StatusGame.win;
+        if (this.board[0][0] != EMPTY && this.board[0][0] == this.board[0][1] && this.board[0][0] == this.board[0][2]) return StatusGame.win;
+        if (this.board[0][0] != EMPTY && this.board[0][0] == this.board[1][0] && this.board[0][0] == this.board[2][0]) return StatusGame.win;
+        if (this.board[0][0] != EMPTY && this.board[0][0] == this.board[1][1] && this.board[0][0] == this.board[2][2]) return StatusGame.win;
 
-        if (this.board[1][0] != -1 && this.board[1][0] == this.board[1][1] && this.board[1][0] == this.board[1][2]) return StatusGame.win;
-        if (this.board[2][0] != -1 && this.board[2][0] == this.board[2][1] && this.board[2][0] == this.board[2][2]) return StatusGame.win;
+        if (this.board[1][0] != EMPTY && this.board[1][0] == this.board[1][1] && this.board[1][0] == this.board[1][2]) return StatusGame.win;
+        if (this.board[2][0] != EMPTY && this.board[2][0] == this.board[2][1] && this.board[2][0] == this.board[2][2]) return StatusGame.win;
 
-        if (this.board[0][1] != -1 && this.board[0][1] == this.board[1][1] && this.board[0][1] == this.board[2][1]) return StatusGame.win;
+        if (this.board[0][1] != EMPTY && this.board[0][1] == this.board[1][1] && this.board[0][1] == this.board[2][1]) return StatusGame.win;
 
-        if (this.board[0][2] != -1 && this.board[0][2] == this.board[1][2] && this.board[0][2] == this.board[2][2]) return StatusGame.win;
-        if (this.board[0][2] != -1 && this.board[0][2] == this.board[1][1] && this.board[0][2] == this.board[2][0]) return StatusGame.win;
+        if (this.board[0][2] != EMPTY && this.board[0][2] == this.board[1][2] && this.board[0][2] == this.board[2][2]) return StatusGame.win;
+        if (this.board[0][2] != EMPTY && this.board[0][2] == this.board[1][1] && this.board[0][2] == this.board[2][0]) return StatusGame.win;
 
 
         return StatusGame.draw;
     }
 
-    public getBoard() {
-        return _.flatten(this.board)
+    public getBoard(player: Player) {
+        let board = _.flatten(this.board);
+        if (player == Player.X) return board;
+
+        board = board.map( position => {
+            if (position == Player.X ) return Player.O;
+            if (position == Player.O) return Player.X;
+            
+            return position
+        })
+
+        return board;
     }
+
+
+
     public printBoard() {
         let prettyBoard = this.board.map(row => {
             let prettyRow = [];
             row.forEach(elem => {
-                if (elem == -1) prettyRow.push('_');
+                if (elem == EMPTY) prettyRow.push('_');
                 if (elem == 1) prettyRow.push('x');
                 if (elem == 0) prettyRow.push('o');
 
