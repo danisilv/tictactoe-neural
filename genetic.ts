@@ -44,6 +44,8 @@ export class Genetic {
     public genomaWinner1 = [];
     public genomaWinner2 = [];
 
+   
+
 
     public async createFirstGeneration(genoma1?, genoma2?) {
         if (genoma1){
@@ -103,7 +105,7 @@ export class Genetic {
             for (let i = 0; i < genoma[layer].length; i++) {
                 if (Math.random() <= this.mutationIndice) {
                     var value = (Math.random() <= 0.5) ? -1 : 1
-                    value *= Math.random();
+                    value += Math.random();
                     genoma[layer][i] *= value;
                 }
             }

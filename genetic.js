@@ -90,7 +90,7 @@ class Genetic {
             let people = new People();
             yield people.initalize();
             this.peoples.push(people);
-            this.peoples = _.shuffle(this.peoples);
+            //this.peoples = _.shuffle(this.peoples)
         });
     }
     genenomaMutation(genoma) {
@@ -99,7 +99,7 @@ class Genetic {
                 for (let i = 0; i < genoma[layer].length; i++) {
                     if (Math.random() <= this.mutationIndice) {
                         var value = (Math.random() <= 0.5) ? -1 : 1;
-                        value *= Math.random();
+                        value += Math.random();
                         genoma[layer][i] *= value;
                     }
                 }

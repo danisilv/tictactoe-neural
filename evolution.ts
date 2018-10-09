@@ -12,7 +12,7 @@ export class Evolution {
     async initialize() {
      
         await this.genetic.createFirstGeneration();
-        this.generations = 500;
+        this.generations = 0;
 
 
     }
@@ -47,6 +47,7 @@ export class Evolution {
             }
 
             await this.genetic.setWinners(winners[0], winners[1]);
+            
 
             this.genetic.peoples.forEach(people => {
                 console.log(`${people.name} Qtde: ${people.qtdeChampion}`)
@@ -54,7 +55,7 @@ export class Evolution {
 
             await this.genetic.createNextGenerations();
 
-            if (this.generations % 50 == 0) {
+            if (this.generations % 200 == 0) {
                 console.log('Genomas Winners:')
 
                 console.log(`G1: ${this.genetic.genomaWinner1}`)
@@ -117,7 +118,7 @@ export class Evolution {
 async function main() {
     let ev = new Evolution();
     await ev.initialize();
-    await ev.gamePlay(1000);
+    await ev.gamePlay(10000);
 
 }
 

@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const genetic_1 = require("./genetic");
 const tictactoe_1 = require("./tictactoe");
-const _ = require("underscore");
 class Evolution {
     constructor() {
         this.genetic = new genetic_1.Genetic;
@@ -21,7 +20,7 @@ class Evolution {
     initialize() {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.genetic.createFirstGeneration();
-            this.generations = 500;
+            this.generations = 0;
         });
     }
     gamePlay(generations) {
@@ -63,7 +62,7 @@ class Evolution {
     contest(players) {
         return __awaiter(this, void 0, void 0, function* () {
             this.ticTacToe = new tictactoe_1.TicTacToe;
-            players = _.shuffle(players);
+            //players = _.shuffle(players);
             players[0].nickname = tictactoe_1.Player.X;
             players[1].nickname = tictactoe_1.Player.O;
             players[0].isWinner = false;
@@ -105,7 +104,7 @@ function main() {
     return __awaiter(this, void 0, void 0, function* () {
         let ev = new Evolution();
         yield ev.initialize();
-        yield ev.gamePlay(1000);
+        yield ev.gamePlay(10000);
     });
 }
 main();
