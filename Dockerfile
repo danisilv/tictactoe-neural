@@ -1,4 +1,4 @@
-FROM python:2.7.14
+FROM ansarada/nodelts-python:3.1.0
 
 # Install node prereqs, nodejs and yarn
 # Ref: https://deb.nodesource.com/setup_8.x
@@ -17,10 +17,10 @@ FROM python:2.7.14
 
 
 
-RUN apt-get update -yq \
-    && apt-get install curl gnupg -yq \
-    && curl -sL https://deb.nodesource.com/setup_8.x | bash \
-    && apt-get install nodejs -yq
+# RUN apt-get update -yq \
+#     && apt-get install curl gnupg -yq \
+#     && curl -sL https://deb.nodesource.com/setup_8.x | bash \
+#     && apt-get install nodejs -yq
 
 
 RUN mkdir -p /app
