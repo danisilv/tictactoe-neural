@@ -13,8 +13,6 @@ export class Evolution {
      
         await this.genetic.createFirstGeneration();
         this.generations = 0;
-
-
     }
 
     async gamePlay(generations: number) {
@@ -57,6 +55,7 @@ export class Evolution {
 
             if (this.generations % 200 == 0) {
                 console.log('Genomas Winners:')
+
 
                 console.log(`G1: ${this.genetic.genomaWinner1}`)
                 console.log(`G2: ${this.genetic.genomaWinner2}`)
