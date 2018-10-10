@@ -13,8 +13,9 @@ export class Neural {
         this.model = await tf.sequential({
             layers: [tf.layers.dense({ units: 9, inputShape: [9], activation: 'relu', useBias: false, kernelInitializer: 'randomUniform' })]
         });
-        this.model.add(tf.layers.dense({ units: 30, activation: 'relu',useBias: false, kernelInitializer: 'randomUniform' }));
-        this.model.add(tf.layers.dense({ units: 9, activation: 'sigmoid',useBias: false, kernelInitializer: 'randomUniform' }));
+        this.model.add(tf.layers.dense({ units: 50, activation: 'relu',useBias: false, kernelInitializer: 'randomUniform' }));
+        this.model.add(tf.layers.dense({ units: 20, activation: 'relu',useBias: false, kernelInitializer: 'randomUniform' }));
+        this.model.add(tf.layers.dense({ units: 9, activation: 'relu',useBias: false, kernelInitializer: 'randomUniform' }));
 
         await this.model.compile({ optimizer: 'adam', loss: 'meanSquaredError', metrics: ['accuracy'] });
     }
@@ -35,6 +36,7 @@ export class Neural {
         weights.push(await this.getWeight(0));
         weights.push(await this.getWeight(1));
         weights.push(await this.getWeight(2));
+        weights.push(await this.getWeight(3));
         return weights;
     }
 
@@ -42,6 +44,7 @@ export class Neural {
         await this.setWeight(0,weights[0]);
         await this.setWeight(1,weights[1]);
         await this.setWeight(2,weights[2]);
+        await this.setWeight(3,weights[3]);
     }
 
     public async setWeight(layer: number, weights) {
@@ -49,8 +52,9 @@ export class Neural {
         var shape;
 
         if (layer == 0) shape = [9,9]
-        else if (layer == 1) shape = [9,30]
-        else if (layer == 2) shape = [30,9]
+        else if (layer == 1) shape = [9,50]
+        else if (layer == 2) shape = [50,20]
+        else if (layer == 3) shape = [20,9]
         
         newWights.push(tf.tensor(weights,shape));
         await this.model.layers[layer].setWeights(newWights)

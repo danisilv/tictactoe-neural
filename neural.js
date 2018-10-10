@@ -16,8 +16,9 @@ class Neural {
             this.model = yield tf.sequential({
                 layers: [tf.layers.dense({ units: 9, inputShape: [9], activation: 'relu', useBias: false, kernelInitializer: 'randomUniform' })]
             });
-            this.model.add(tf.layers.dense({ units: 30, activation: 'relu', useBias: false, kernelInitializer: 'randomUniform' }));
-            this.model.add(tf.layers.dense({ units: 9, activation: 'sigmoid', useBias: false, kernelInitializer: 'randomUniform' }));
+            this.model.add(tf.layers.dense({ units: 50, activation: 'relu', useBias: false, kernelInitializer: 'randomUniform' }));
+            this.model.add(tf.layers.dense({ units: 20, activation: 'relu', useBias: false, kernelInitializer: 'randomUniform' }));
+            this.model.add(tf.layers.dense({ units: 9, activation: 'relu', useBias: false, kernelInitializer: 'randomUniform' }));
             yield this.model.compile({ optimizer: 'adam', loss: 'meanSquaredError', metrics: ['accuracy'] });
         });
     }
@@ -38,6 +39,7 @@ class Neural {
             weights.push(yield this.getWeight(0));
             weights.push(yield this.getWeight(1));
             weights.push(yield this.getWeight(2));
+            weights.push(yield this.getWeight(3));
             return weights;
         });
     }
@@ -46,6 +48,7 @@ class Neural {
             yield this.setWeight(0, weights[0]);
             yield this.setWeight(1, weights[1]);
             yield this.setWeight(2, weights[2]);
+            yield this.setWeight(3, weights[3]);
         });
     }
     setWeight(layer, weights) {
@@ -55,9 +58,11 @@ class Neural {
             if (layer == 0)
                 shape = [9, 9];
             else if (layer == 1)
-                shape = [9, 30];
+                shape = [9, 50];
             else if (layer == 2)
-                shape = [30, 9];
+                shape = [50, 20];
+            else if (layer == 3)
+                shape = [20, 9];
             newWights.push(tf.tensor(weights, shape));
             yield this.model.layers[layer].setWeights(newWights);
         });

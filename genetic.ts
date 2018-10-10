@@ -39,11 +39,11 @@ export class People {
 
 export class Genetic {
 
-    crossOverIndice = 0.5;
-    mutationIndice = 0.05;
+    crossOverIndice = 0.15;
+    mutationIndice = 0.001;
 
 
-    public qtdePeoples = 20;
+    public qtdePeoples = 30;
     public peoples: People[] = [];
 
     public genomaWinner1 = [];
@@ -176,7 +176,7 @@ export class Genetic {
             for (let i = 0; i < genoma[layer].length; i++) {
                 if (Math.random() <= this.mutationIndice) {
                     var value = (Math.random() <= 0.5) ? -1 : 1
-                    value += Math.random();
+                    value *= Math.random();
                     genoma[layer][i] *= value;
                 }
             }
@@ -189,10 +189,13 @@ export class Genetic {
     private async genomaCrossOver() {
 
         let newGenoma = [];
+        let copyfrom2 = false;
         for (let layer = 0; layer < this.genomaWinner1.length; layer++) {
             newGenoma.push(this.genomaWinner1[layer]);
             for (let i = 0; i < this.genomaWinner1[layer].length; i++) {
-                if (Math.random() > 0.5)
+                if (Math.random() <= this.crossOverIndice) copyfrom2 = !copyfrom2;
+
+                if ( copyfrom2)
                     newGenoma[layer][i] = this.genomaWinner2[layer][i];
             }
         }

@@ -44,9 +44,9 @@ class People {
 exports.People = People;
 class Genetic {
     constructor() {
-        this.crossOverIndice = 0.5;
-        this.mutationIndice = 0.05;
-        this.qtdePeoples = 20;
+        this.crossOverIndice = 0.15;
+        this.mutationIndice = 0.001;
+        this.qtdePeoples = 30;
         this.peoples = [];
         this.genomaWinner1 = [];
         this.genomaWinner2 = [];
@@ -149,7 +149,7 @@ class Genetic {
                 for (let i = 0; i < genoma[layer].length; i++) {
                     if (Math.random() <= this.mutationIndice) {
                         var value = (Math.random() <= 0.5) ? -1 : 1;
-                        value += Math.random();
+                        value *= Math.random();
                         genoma[layer][i] *= value;
                     }
                 }
@@ -161,10 +161,13 @@ class Genetic {
     genomaCrossOver() {
         return __awaiter(this, void 0, void 0, function* () {
             let newGenoma = [];
+            let copyfrom2 = false;
             for (let layer = 0; layer < this.genomaWinner1.length; layer++) {
                 newGenoma.push(this.genomaWinner1[layer]);
                 for (let i = 0; i < this.genomaWinner1[layer].length; i++) {
-                    if (Math.random() > 0.5)
+                    if (Math.random() <= this.crossOverIndice)
+                        copyfrom2 = !copyfrom2;
+                    if (copyfrom2)
                         newGenoma[layer][i] = this.genomaWinner2[layer][i];
                 }
             }
