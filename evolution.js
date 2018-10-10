@@ -140,7 +140,7 @@ function main() {
         yield ev.initialize();
         for (let i = 0; i < 10000; i++) {
             yield ev.championship();
-            if (i % 3 == 0)
+            if (i % 100 == 0)
                 yield ev.genetic.peoples[ev.genetic.qtdePeoples - 1].neural.model.save(`file://models/model${i}`);
         }
     });

@@ -40,7 +40,7 @@ export class People {
 export class Genetic {
 
     crossOverIndice = 0.5;
-    mutationIndice = 0.15;
+    mutationIndice = 0.05;
 
 
     public qtdePeoples = 20;

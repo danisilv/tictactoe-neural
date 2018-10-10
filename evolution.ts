@@ -159,6 +159,7 @@ export class Evolution {
 
 
     }
+
 }
 
 async function main() {
@@ -168,7 +169,7 @@ async function main() {
         
         
         await ev.championship();
-        if (i % 3 == 0)
+        if (i % 100 == 0)
             await ev.genetic.peoples[ev.genetic.qtdePeoples-1].neural.model.save(`file://models/model${i}`)
     }
         
