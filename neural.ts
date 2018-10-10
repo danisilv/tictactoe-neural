@@ -6,7 +6,7 @@ require('@tensorflow/tfjs-node');  // Use '@tensorflow/tfjs-node-gpu' if running
 
 export class Neural {
 
-    private model: Sequential;
+    public model: Sequential;
     
 
     public async initalize() {

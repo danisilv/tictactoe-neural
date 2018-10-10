@@ -7,9 +7,14 @@ import _ = require('underscore');
 export class People {
     public neural = new Neural;
     public name: string;
-    public isWinner = true;
+    public isWinner = false;
     public nickname: Player;
-    qtdeChampion = 0;
+    public plays:0;
+    public qtdeChampion = 0;
+    public points = 0;
+    public wins = 0;
+    public tied = 0;
+    public losses = 0;
 
     async initalize(genoma?) {
         await this.neural.initalize();
@@ -35,20 +40,22 @@ export class People {
 export class Genetic {
 
     crossOverIndice = 0.5;
-    mutationIndice = 0.30;
+    mutationIndice = 0.15;
 
 
-    public qtdePeoples = 8;
+    public qtdePeoples = 20;
     public peoples: People[] = [];
 
     public genomaWinner1 = [];
     public genomaWinner2 = [];
+    public nameWinner1:string;
+    public nameWinner2:string;
 
-   
+
 
 
     public async createFirstGeneration(genoma1?, genoma2?) {
-        if (genoma1){
+        if (genoma1) {
             let people1 = new People;
             await people1.initalize(genoma1);
             this.peoples.push(people1)
@@ -59,7 +66,7 @@ export class Genetic {
 
             return;
         }
-        
+
         for (let i = 0; i < this.qtdePeoples; i++) {
             let people = new People();
             await people.initalize();
@@ -67,34 +74,98 @@ export class Genetic {
         }
     }
 
-    public async setWinners(firstPlace: number, secondPlace: number) {
-        this.peoples = this.peoples.filter((people, index) => {
-            return (index == firstPlace || index == secondPlace)
-        })
+    public async setWinners() {
+        // let winners = this.peoples.filter((people, index) => {
+        //     return (index == firstPlace || index == secondPlace)
+        // })
+       
+         this.genomaWinner1 = await this.peoples[this.qtdePeoples -1].neural.getWeights();
+         this.genomaWinner2 = await this.peoples[this.qtdePeoples -2].neural.getWeights();
+         
+         this.nameWinner1 = this.peoples[this.qtdePeoples -1].name;
+         this.nameWinner2 = this.peoples[this.qtdePeoples -2].name;
+         
+         this.peoples[this.qtdePeoples -1].qtdeChampion++;
+         this.peoples[this.qtdePeoples -2].qtdeChampion++;
 
-        this.peoples.forEach(people => {
-            people.qtdeChampion++;
-        })
+        // for (let i = 0; i < this.peoples.length; i++) {
+        //     if (i != firstPlace && i != secondPlace) {
 
-        this.genomaWinner1 = await this.peoples[0].neural.getWeights();
-        this.genomaWinner2 = await this.peoples[1].neural.getWeights();
-        
+        //     }
+
+        //     if (i == firstPlace) {
+        //         this.genomaWinner1 = await this.peoples[i].neural.getWeights();
+        //         await this.peoples[0].neural.setWeights(await this.peoples[i].neural.getWeights())
+        //         this.peoples[0].name = this.peoples[i].name;
+        //         this.peoples[0].qtdeChampion = this.peoples[i].qtdeChampion + 1;
+        //         this.peoples[0].isWinner = true;
+        //     }
+
+        //     else if (i == secondPlace) {
+        //         this.genomaWinner2 = await this.peoples[i].neural.getWeights();
+        //         await this.peoples[1].neural.setWeights(await this.peoples[i].neural.getWeights())
+        //         this.peoples[1].name = this.peoples[i].name;
+        //         this.peoples[1].qtdeChampion = this.peoples[i].qtdeChampion + 1;
+        //         this.peoples[1].isWinner = true;
+        //     }
+        //     else {
+        //         this.peoples[i].name = faker.name.findName();
+        //         this.peoples[i].qtdeChampion = 0;
+        //         this.peoples[i].isWinner = true;
+        //     }
+
+
+        // }
+
+        // this.peoples.forEach(people => {
+        //     people.qtdeChampion++;
+        // })
+
+        // this.genomaWinner1 = await this.peoples[0].neural.getWeights();
+        // this.genomaWinner2 = await this.peoples[1].neural.getWeights();
+
     }
 
     public async createNextGenerations() {
 
-        for (let i = 0; i < this.qtdePeoples - 3; i++) {
+        
+        this.peoples[0].name = this.nameWinner1;
+        this.peoples[0].neural.setWeights(this.genomaWinner1);
+        this.peoples[0].points = 0;
+        this.peoples[0].plays = 0;
+        this.peoples[0].wins = this.peoples[0].losses = this.peoples[0].tied = 0;
+        
+
+        
+        this.peoples[1].name = this.nameWinner2;
+        this.peoples[1].neural.setWeights(this.genomaWinner2);
+        this.peoples[1].points = 0;
+        this.peoples[1].plays = 0;
+        this.peoples[1].wins = this.peoples[1].losses = this.peoples[1].tied = 0;
+        
+
+        for (let i = 2; i < this.qtdePeoples; i++) {
+            this.peoples[i].name = faker.name.findName();
+            this.peoples[i].qtdeChampion = 0;
+            this.peoples[i].isWinner = true;
+            this.peoples[i].points = 0;
+            this.peoples[i].plays = 0;
+            this.peoples[i].wins = this.peoples[i].losses = this.peoples[i].tied = 0;
+
             let newGenoma = await this.genomaCrossOver();
-            await this.genenomaMutation(newGenoma);
-            let people = new People;
-            await people.initalize(newGenoma);
-            this.peoples.push(people)
+            newGenoma = await this.genenomaMutation(newGenoma);
+            
+            await this.peoples[i].neural.setWeights(newGenoma);
+
+            //let people = new People;
+            //await people.initalize(newGenoma);
+            //this.peoples.push(people)
         }
 
         // colocando 1 aleatorio
-        let people = new People();
-        await people.initalize();
-        this.peoples.push(people)
+        // let people = new People();
+        // await people.initalize();
+        // this.peoples.push(people)
 
         this.peoples = _.shuffle(this.peoples)
 
