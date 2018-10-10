@@ -45,7 +45,7 @@ exports.People = People;
 class Genetic {
     constructor() {
         this.crossOverIndice = 0.5;
-        this.mutationIndice = 0.15;
+        this.mutationIndice = 0.05;
         this.qtdePeoples = 20;
         this.peoples = [];
         this.genomaWinner1 = [];
