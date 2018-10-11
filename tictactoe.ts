@@ -14,7 +14,7 @@ export enum Player {
     O = 0
 }
 
-const EMPTY = 0.5;
+const EMPTY = -1;
 export class TicTacToe {
     public board =
         [[EMPTY, EMPTY, EMPTY],
@@ -29,9 +29,9 @@ export class TicTacToe {
             var line = POSITION[positions[i].index][0];
             var column = POSITION[positions[i].index][1];
 
-            if (this.board[line][column] != EMPTY) 
+            if (this.board[line][column] != EMPTY)
                 continue;
-              //  return { move: positions[i].index, status: StatusGame.loss};
+            //  return { move: positions[i].index, status: StatusGame.loss};
 
             this.board[line][column] = player;
 
@@ -58,18 +58,43 @@ export class TicTacToe {
         return StatusGame.draw;
     }
 
-    public getBoard(player: Player) {
+    public getBoard2(player: Player) {
         let board = _.flatten(this.board);
         if (player == Player.X) return board;
 
-        board = board.map( position => {
-            if (position == Player.X ) return Player.O;
+        board = board.map(position => {
+            if (position == Player.X) return Player.O;
             if (position == Player.O) return Player.X;
-            
+
             return position
         })
 
+
         return board;
+    }
+
+    public getBoard(player: Player) {
+        let board = _.flatten(this.board);
+        //if (player == Player.X) return board;
+
+        if (player == Player.O)
+            board = board.map(position => {
+                if (position == Player.X) return [0, 1]
+                if (position == Player.O) return [1, 0];
+
+                return [0, 0]
+            })
+
+        if (player == Player.X)
+            board = board.map(position => {
+                if (position == Player.X) return [1, 0]
+                if (position == Player.O) return [0, 1];
+
+                return [0, 0]
+            })
+
+
+        return _.flatten(this.board);
     }
 
 
@@ -83,7 +108,7 @@ export class TicTacToe {
                 if (elem == 0) prettyRow.push('o');
 
             })
-            
+
             return prettyRow;
         })
         console.log(`${prettyBoard[0]}\n${prettyBoard[1]}\n${prettyBoard[2]}`)

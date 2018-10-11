@@ -112,12 +112,12 @@ class Evolution {
                 }
                 if (status.status == tictactoe_1.StatusGame.draw && i == 8) {
                     if (playerTurn == firstPlayer) {
-                        playerTurn.points += 5;
-                        playerNextTurn.points += 10;
+                        playerTurn.points += 10;
+                        playerNextTurn.points += 15;
                     }
                     if (playerTurn == secondPlayer) {
-                        playerTurn.points += 10;
-                        playerNextTurn.points += 5;
+                        playerTurn.points += 15;
+                        playerNextTurn.points += 10;
                     }
                     playerTurn.tied++;
                     playerNextTurn.tied++;

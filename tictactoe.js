@@ -13,7 +13,7 @@ var Player;
     Player[Player["X"] = 1] = "X";
     Player[Player["O"] = 0] = "O";
 })(Player = exports.Player || (exports.Player = {}));
-const EMPTY = 0.5;
+const EMPTY = -1;
 class TicTacToe {
     constructor() {
         this.board = [[EMPTY, EMPTY, EMPTY],
@@ -50,7 +50,7 @@ class TicTacToe {
             return StatusGame.win;
         return StatusGame.draw;
     }
-    getBoard(player) {
+    getBoard2(player) {
         let board = _.flatten(this.board);
         if (player == Player.X)
             return board;
@@ -62,6 +62,27 @@ class TicTacToe {
             return position;
         });
         return board;
+    }
+    getBoard(player) {
+        let board = _.flatten(this.board);
+        //if (player == Player.X) return board;
+        if (player == Player.O)
+            board = board.map(position => {
+                if (position == Player.X)
+                    return [0, 1];
+                if (position == Player.O)
+                    return [1, 0];
+                return [0, 0];
+            });
+        if (player == Player.X)
+            board = board.map(position => {
+                if (position == Player.X)
+                    return [1, 0];
+                if (position == Player.O)
+                    return [0, 1];
+                return [0, 0];
+            });
+        return _.flatten(this.board);
     }
     printBoard() {
         let prettyBoard = this.board.map(row => {

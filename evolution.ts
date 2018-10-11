@@ -134,8 +134,8 @@ export class Evolution {
 
             if (status.status == StatusGame.draw && i == 8) {
                 if (playerTurn == firstPlayer){
-                    playerTurn.points += 5;
-                    playerNextTurn.points += 10;
+                    playerTurn.points += 10;
+                    playerNextTurn.points += 15;
                 } 
                 if (playerTurn == secondPlayer)
                 {

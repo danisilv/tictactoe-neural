@@ -43,7 +43,7 @@ export class Genetic {
     mutationIndice = 0.1;
 
 
-    public qtdePeoples = 20;
+    public qtdePeoples = 10;
     public peoples: People[] = [];
 
     public genomaWinner1 = [];
@@ -152,7 +152,7 @@ export class Genetic {
         for (let layer = 0; layer < this.genomaWinner1.length; layer++) {
             newGenoma.push(this.genomaWinner1[layer]);
             for (let i = 0; i < this.genomaWinner1[layer].length; i++) {
-                
+
                 if (Math.random() <= this.crossOverIndice) copyfrom2 = !copyfrom2;
 
                 if ( copyfrom2)

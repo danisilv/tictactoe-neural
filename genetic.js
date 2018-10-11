@@ -47,7 +47,7 @@ class Genetic {
     constructor() {
         this.crossOverIndice = 0.15;
         this.mutationIndice = 0.1;
-        this.qtdePeoples = 20;
+        this.qtdePeoples = 10;
         this.peoples = [];
         this.genomaWinner1 = [];
         this.genomaWinner2 = [];
