@@ -26,7 +26,7 @@ class TicTacToe {
             var column = POSITION[positions[i].index][1];
             if (this.board[line][column] != EMPTY)
                 continue;
-            // return { move: positions[i].index, status: StatusGame.loss};
+            //  return { move: positions[i].index, status: StatusGame.loss};
             this.board[line][column] = player;
             return { move: positions[i].index, status: this.getStatus() };
         }

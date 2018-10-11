@@ -16,6 +16,7 @@ class People {
     constructor() {
         this.neural = new neural_1.Neural;
         this.isWinner = false;
+        this.plays = 0;
         this.qtdeChampion = 0;
         this.points = 0;
         this.wins = 0;
@@ -45,8 +46,8 @@ exports.People = People;
 class Genetic {
     constructor() {
         this.crossOverIndice = 0.15;
-        this.mutationIndice = 0.001;
-        this.qtdePeoples = 30;
+        this.mutationIndice = 0.1;
+        this.qtdePeoples = 20;
         this.peoples = [];
         this.genomaWinner1 = [];
         this.genomaWinner2 = [];
@@ -80,34 +81,6 @@ class Genetic {
             this.nameWinner2 = this.peoples[this.qtdePeoples - 2].name;
             this.peoples[this.qtdePeoples - 1].qtdeChampion++;
             this.peoples[this.qtdePeoples - 2].qtdeChampion++;
-            // for (let i = 0; i < this.peoples.length; i++) {
-            //     if (i != firstPlace && i != secondPlace) {
-            //     }
-            //     if (i == firstPlace) {
-            //         this.genomaWinner1 = await this.peoples[i].neural.getWeights();
-            //         await this.peoples[0].neural.setWeights(await this.peoples[i].neural.getWeights())
-            //         this.peoples[0].name = this.peoples[i].name;
-            //         this.peoples[0].qtdeChampion = this.peoples[i].qtdeChampion + 1;
-            //         this.peoples[0].isWinner = true;
-            //     }
-            //     else if (i == secondPlace) {
-            //         this.genomaWinner2 = await this.peoples[i].neural.getWeights();
-            //         await this.peoples[1].neural.setWeights(await this.peoples[i].neural.getWeights())
-            //         this.peoples[1].name = this.peoples[i].name;
-            //         this.peoples[1].qtdeChampion = this.peoples[i].qtdeChampion + 1;
-            //         this.peoples[1].isWinner = true;
-            //     }
-            //     else {
-            //         this.peoples[i].name = faker.name.findName();
-            //         this.peoples[i].qtdeChampion = 0;
-            //         this.peoples[i].isWinner = true;
-            //     }
-            // }
-            // this.peoples.forEach(people => {
-            //     people.qtdeChampion++;
-            // })
-            // this.genomaWinner1 = await this.peoples[0].neural.getWeights();
-            // this.genomaWinner2 = await this.peoples[1].neural.getWeights();
         });
     }
     createNextGenerations() {
@@ -132,14 +105,7 @@ class Genetic {
                 let newGenoma = yield this.genomaCrossOver();
                 newGenoma = yield this.genenomaMutation(newGenoma);
                 yield this.peoples[i].neural.setWeights(newGenoma);
-                //let people = new People;
-                //await people.initalize(newGenoma);
-                //this.peoples.push(people)
             }
-            // colocando 1 aleatorio
-            // let people = new People();
-            // await people.initalize();
-            // this.peoples.push(people)
             this.peoples = _.shuffle(this.peoples);
         });
     }

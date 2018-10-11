@@ -29,10 +29,8 @@ class Evolution {
             console.log(`\n ################# Generation ${++this.generations} ##################`);
             for (let playerA = 0; playerA < this.genetic.peoples.length - 1; playerA++) {
                 for (let playerB = playerA + 1; playerB < this.genetic.peoples.length; playerB++) {
-                    if (Math.random() < 0.5)
-                        yield this.contest(this.genetic.peoples[playerA], this.genetic.peoples[playerB]);
-                    else
-                        yield this.contest(this.genetic.peoples[playerB], this.genetic.peoples[playerA]);
+                    yield this.contest(this.genetic.peoples[playerA], this.genetic.peoples[playerB]);
+                    yield this.contest(this.genetic.peoples[playerB], this.genetic.peoples[playerA]);
                 }
             }
             this.genetic.peoples = _.sortBy(this.genetic.peoples, 'points');
@@ -80,44 +78,44 @@ class Evolution {
     //         }
     //     } while (this.generations < generations);
     // }
-    contest(playerA, playerB) {
+    contest(firstPlayer, secondPlayer) {
         return __awaiter(this, void 0, void 0, function* () {
             this.ticTacToe = new tictactoe_1.TicTacToe;
             //players = _.shuffle(players);
-            playerA.nickname = tictactoe_1.Player.X;
-            playerB.nickname = tictactoe_1.Player.O;
+            firstPlayer.nickname = tictactoe_1.Player.X;
+            secondPlayer.nickname = tictactoe_1.Player.O;
             // console.log(`\n---- ${playerA.name} VS ${playerB.name} -------`)
-            let playerTurn = playerA;
-            let playerNextTurn = playerB;
+            let playerTurn = firstPlayer;
+            let playerNextTurn = secondPlayer;
             for (let i = 0; i < 9; i++) {
                 let move = yield playerTurn.predict(this.ticTacToe.getBoard(playerTurn.nickname));
                 let status = yield this.ticTacToe.play(move, playerTurn.nickname);
                 playerTurn.plays++;
                 if (status.status == tictactoe_1.StatusGame.win) {
                     //console.log(players[i % 2].name + ' Play:' + status.move + ' [' + players[i % 2].nickname + '] ==> ' + status.status);
-                    if (playerTurn == playerA)
+                    if (playerTurn == firstPlayer)
                         playerTurn.points += 10;
-                    if (playerTurn == playerB)
+                    if (playerTurn == secondPlayer)
                         playerTurn.points += 15;
                     playerTurn.wins++;
                     playerNextTurn.losses++;
                     break;
                 }
                 if (status.status == tictactoe_1.StatusGame.loss) {
-                    if (playerNextTurn == playerA)
+                    if (playerNextTurn == firstPlayer)
                         playerTurn.points += 10;
-                    if (playerNextTurn == playerB)
+                    if (playerNextTurn == secondPlayer)
                         playerTurn.points += 15;
                     playerTurn.losses++;
                     playerNextTurn.wins++;
                     break;
                 }
                 if (status.status == tictactoe_1.StatusGame.draw && i == 8) {
-                    if (playerTurn == playerA) {
+                    if (playerTurn == firstPlayer) {
                         playerTurn.points += 5;
                         playerNextTurn.points += 10;
                     }
-                    if (playerTurn == playerB) {
+                    if (playerTurn == secondPlayer) {
                         playerTurn.points += 10;
                         playerNextTurn.points += 5;
                     }
