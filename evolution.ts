@@ -21,91 +21,47 @@ export class Evolution {
 
             for (let playerB = playerA + 1; playerB < this.genetic.peoples.length; playerB++) {
 
-                    await this.contest(this.genetic.peoples[playerA], this.genetic.peoples[playerB]);
-                    await this.contest(this.genetic.peoples[playerB], this.genetic.peoples[playerA]);
+                await this.contest(this.genetic.peoples[playerA], this.genetic.peoples[playerB]);
+                await this.contest(this.genetic.peoples[playerB], this.genetic.peoples[playerA]);
             }
         }
 
-        this.genetic.peoples = _.sortBy(this.genetic.peoples, 'points');
-        
-        let meanPlays =0;
-        this.genetic.peoples.forEach( people => {
+       // this.genetic.peoples = _.sortBy(this.genetic.peoples, 'points');
+
+        this.genetic.peoples = this.genetic.peoples.sort((a, b) => {
+            if (a.points != b.points) return a.points - b.points
+            else if (a.plays != b.plays) return a.plays - b.plays
+            else return a.qtdeChampion - b.qtdeChampion
+            //   if (a.plays != b.plays) return a.points - b.points
+            //  else return a.plays - b.plays
+        })
+
+        let meanPlays = 0;
+        this.genetic.peoples.forEach(people => {
             console.log(`${people.name} Points: ${people.points} (${people.plays}) (${people.qtdeChampion}) [W:${people.wins} T: ${people.tied} L: ${people.losses}]`)
             meanPlays += people.plays;
         })
-        
-        console.log(`Mean Plays: ${meanPlays/this.genetic.peoples.length}`)
+
+        console.log(`Mean Plays: ${meanPlays / this.genetic.peoples.length}`)
 
         await this.genetic.setWinners();
 
-        
+
 
         await this.genetic.createNextGenerations();
 
     }
 
-    // async killKill(generations: number) {
-    //     do {
-
-
-    //         console.log(`\n ################# Generation ${++this.generations} ##################`)
-    //         for (let round = 0; round < 2; round++) {
-    //             var players = [];
-    //             for (let i = 0; i < this.genetic.peoples.length; i++) {
-    //                 if (this.genetic.peoples[i].isWinner) players.push(this.genetic.peoples[i]);
-
-    //                 if (players.length == 2) {
-    //                     await this.contest([players[0], players[1]]);
-    //                     this.ticTacToe.printBoard();
-    //                     var players = [];
-    //                 }
-
-    //             }
-    //         }
-
-    //         console.log(`\n ########### Results ###################`)
-    //         let winners = [];
-    //         for (let i = 0; i < this.genetic.peoples.length; i++) {
-    //             if (this.genetic.peoples[i].isWinner) {
-
-    //                 winners.push(i);
-    //             }
-
-    //         }
-
-    //         await this.genetic.setWinners(winners[0], winners[1]);
-
-
-    //         await this.genetic.peoples.forEach(people => {
-    //             if (people.qtdeChampion > 0)
-    //                 console.log(`${people.name} Qtde: ${people.qtdeChampion}`)
-    //         })
-
-    //         await this.genetic.createNextGenerations();
-
-    //         if (this.generations % 200 == 0) {
-    //             console.log('Genomas Winners:')
-
-
-    //             console.log(`G1: ${this.genetic.genomaWinner1}`)
-    //             console.log(`G2: ${this.genetic.genomaWinner2}`)
-
-    //         }
-
-
-
-    //     } while (this.generations < generations);
-    // }
-
+   
     async contest(firstPlayer: People, secondPlayer: People) {
-        
+
         this.ticTacToe = new TicTacToe;
         //players = _.shuffle(players);
 
         firstPlayer.nickname = Player.X;
         secondPlayer.nickname = Player.O;
 
-       // console.log(`\n---- ${playerA.name} VS ${playerB.name} -------`)
+        // console.log(`\n---- ${playerA.name} VS ${playerB.name} -------`)
 
         let playerTurn = firstPlayer;
         let playerNextTurn = secondPlayer;
@@ -125,24 +81,23 @@ export class Evolution {
             }
 
             if (status.status == StatusGame.loss) {
-                if (playerNextTurn == firstPlayer) playerTurn.points += 10;
-                if (playerNextTurn == secondPlayer) playerTurn.points += 15;
+                if (playerNextTurn == firstPlayer) playerNextTurn.points += 10;
+                if (playerNextTurn == secondPlayer) playerNextTurn.points += 15;
                 playerTurn.losses++;
                 playerNextTurn.wins++;
                 break;
             }
 
             if (status.status == StatusGame.draw && i == 8) {
-                if (playerTurn == firstPlayer){
+                if (playerTurn == firstPlayer) {
                     playerTurn.points += 10;
                     playerNextTurn.points += 15;
-                } 
-                if (playerTurn == secondPlayer)
-                {
+                }
+                if (playerTurn == secondPlayer) {
                     playerTurn.points += 10;
                     playerNextTurn.points += 5
 
-                } 
+                }
                 playerTurn.tied++;
                 playerNextTurn.tied++;
                 break;
@@ -151,7 +106,7 @@ export class Evolution {
             let auxPlayer = playerTurn;
             playerTurn = playerNextTurn;
             playerNextTurn = auxPlayer;
-            
+
         }
         //this.ticTacToe.printBoard();
 
@@ -163,14 +118,14 @@ export class Evolution {
 async function main() {
     let ev = new Evolution();
     await ev.initialize();
-    for (let i =0; i<10000; i++){
-        
-        
+    for (let i = 0; i < 10000; i++) {
+
+
         await ev.championship();
         if (i % 100 == 0)
-            await ev.genetic.peoples[ev.genetic.qtdePeoples-1].neural.model.save(`file://models/model${i}`)
+            await ev.genetic.peoples[ev.genetic.qtdePeoples - 1].neural.model.save(`file://models/model${i}`)
     }
-        
+
 
 }
 

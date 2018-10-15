@@ -14,11 +14,11 @@ class Neural {
     initalize() {
         return __awaiter(this, void 0, void 0, function* () {
             this.model = yield tf.sequential({
-                layers: [tf.layers.dense({ units: 18, inputShape: [9], activation: 'linear', useBias: false, kernelInitializer: 'randomUniform' })]
+                layers: [tf.layers.dense({ units: 18, inputShape: [9], activation: 'relu', useBias: false, kernelInitializer: 'randomUniform' })]
             });
-            //  this.model.add(tf.layers.dense({ units: 32, activation: 'sigmoid',useBias: false, kernelInitializer: 'randomUniform' }));
+            this.model.add(tf.layers.dense({ units: 50, activation: 'relu', useBias: false, kernelInitializer: 'randomUniform' }));
             //this.model.add(tf.layers.dense({ units: 20, activation: 'relu',useBias: false, kernelInitializer: 'randomUniform' }));
-            this.model.add(tf.layers.dense({ units: 9, activation: 'sigmoid', useBias: false, kernelInitializer: 'randomUniform' }));
+            this.model.add(tf.layers.dense({ units: 9, activation: 'relu', useBias: false, kernelInitializer: 'randomUniform' }));
             yield this.model.compile({ optimizer: 'adam', loss: 'meanSquaredError', metrics: ['accuracy'] });
         });
     }
@@ -38,7 +38,7 @@ class Neural {
             let weights = [];
             weights.push(yield this.getWeight(0));
             weights.push(yield this.getWeight(1));
-            //  weights.push(await this.getWeight(2));
+            weights.push(yield this.getWeight(2));
             // weights.push(await this.getWeight(3));
             return weights;
         });
@@ -47,7 +47,7 @@ class Neural {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.setWeight(0, weights[0]);
             yield this.setWeight(1, weights[1]);
-            //    await this.setWeight(2,weights[2]);
+            yield this.setWeight(2, weights[2]);
             // await this.setWeight(3,weights[3]);
         });
     }
@@ -58,8 +58,12 @@ class Neural {
             if (layer == 0)
                 shape = [9, 18];
             else if (layer == 1)
-                shape = [18, 9];
-            newWights.push(tf.tensor(weights, shape));
+                shape = [18, 50];
+            else if (layer == 2)
+                shape = [50, 9];
+            newWights.push(tf.tidy(() => {
+                return tf.tensor(weights, shape);
+            }));
             yield this.model.layers[layer].setWeights(newWights);
         });
     }

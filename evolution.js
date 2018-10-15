@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const genetic_1 = require("./genetic");
 const tictactoe_1 = require("./tictactoe");
-const _ = require("underscore");
 class Evolution {
     constructor() {
         this.genetic = new genetic_1.Genetic;
@@ -33,7 +32,17 @@ class Evolution {
                     yield this.contest(this.genetic.peoples[playerB], this.genetic.peoples[playerA]);
                 }
             }
-            this.genetic.peoples = _.sortBy(this.genetic.peoples, 'points');
+            // this.genetic.peoples = _.sortBy(this.genetic.peoples, 'points');
+            this.genetic.peoples = this.genetic.peoples.sort((a, b) => {
+                if (a.points != b.points)
+                    return a.points - b.points;
+                else if (a.plays != b.plays)
+                    return a.plays - b.plays;
+                else
+                    return a.qtdeChampion - b.qtdeChampion;
+                //   if (a.plays != b.plays) return a.points - b.points
+                //  else return a.plays - b.plays
+            });
             let meanPlays = 0;
             this.genetic.peoples.forEach(people => {
                 console.log(`${people.name} Points: ${people.points} (${people.plays}) (${people.qtdeChampion}) [W:${people.wins} T: ${people.tied} L: ${people.losses}]`);
@@ -44,40 +53,6 @@ class Evolution {
             yield this.genetic.createNextGenerations();
         });
     }
-    // async killKill(generations: number) {
-    //     do {
-    //         console.log(`\n ################# Generation ${++this.generations} ##################`)
-    //         for (let round = 0; round < 2; round++) {
-    //             var players = [];
-    //             for (let i = 0; i < this.genetic.peoples.length; i++) {
-    //                 if (this.genetic.peoples[i].isWinner) players.push(this.genetic.peoples[i]);
-    //                 if (players.length == 2) {
-    //                     await this.contest([players[0], players[1]]);
-    //                     this.ticTacToe.printBoard();
-    //                     var players = [];
-    //                 }
-    //             }
-    //         }
-    //         console.log(`\n ########### Results ###################`)
-    //         let winners = [];
-    //         for (let i = 0; i < this.genetic.peoples.length; i++) {
-    //             if (this.genetic.peoples[i].isWinner) {
-    //                 winners.push(i);
-    //             }
-    //         }
-    //         await this.genetic.setWinners(winners[0], winners[1]);
-    //         await this.genetic.peoples.forEach(people => {
-    //             if (people.qtdeChampion > 0)
-    //                 console.log(`${people.name} Qtde: ${people.qtdeChampion}`)
-    //         })
-    //         await this.genetic.createNextGenerations();
-    //         if (this.generations % 200 == 0) {
-    //             console.log('Genomas Winners:')
-    //             console.log(`G1: ${this.genetic.genomaWinner1}`)
-    //             console.log(`G2: ${this.genetic.genomaWinner2}`)
-    //         }
-    //     } while (this.generations < generations);
-    // }
     contest(firstPlayer, secondPlayer) {
         return __awaiter(this, void 0, void 0, function* () {
             this.ticTacToe = new tictactoe_1.TicTacToe;
@@ -103,9 +78,9 @@ class Evolution {
                 }
                 if (status.status == tictactoe_1.StatusGame.loss) {
                     if (playerNextTurn == firstPlayer)
-                        playerTurn.points += 10;
+                        playerNextTurn.points += 10;
                     if (playerNextTurn == secondPlayer)
-                        playerTurn.points += 15;
+                        playerNextTurn.points += 15;
                     playerTurn.losses++;
                     playerNextTurn.wins++;
                     break;
@@ -116,8 +91,8 @@ class Evolution {
                         playerNextTurn.points += 15;
                     }
                     if (playerTurn == secondPlayer) {
-                        playerTurn.points += 15;
-                        playerNextTurn.points += 10;
+                        playerTurn.points += 10;
+                        playerNextTurn.points += 5;
                     }
                     playerTurn.tied++;
                     playerNextTurn.tied++;

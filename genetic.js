@@ -90,11 +90,13 @@ class Genetic {
             this.peoples[0].points = 0;
             this.peoples[0].plays = 0;
             this.peoples[0].wins = this.peoples[0].losses = this.peoples[0].tied = 0;
+            this.peoples[0].qtdeChampion = this.peoples[this.qtdePeoples - 2].qtdeChampion;
             this.peoples[1].name = this.nameWinner2;
             this.peoples[1].neural.setWeights(this.genomaWinner2);
             this.peoples[1].points = 0;
             this.peoples[1].plays = 0;
             this.peoples[1].wins = this.peoples[1].losses = this.peoples[1].tied = 0;
+            this.peoples[1].qtdeChampion = this.peoples[this.qtdePeoples - 1].qtdeChampion;
             for (let i = 2; i < this.qtdePeoples; i++) {
                 this.peoples[i].name = faker.name.findName();
                 this.peoples[i].qtdeChampion = 0;
@@ -115,7 +117,7 @@ class Genetic {
                 for (let i = 0; i < genoma[layer].length; i++) {
                     if (Math.random() <= this.mutationIndice) {
                         var value = (Math.random() <= 0.5) ? -1 : 1;
-                        value *= Math.random();
+                        value = Math.random();
                         genoma[layer][i] *= value;
                     }
                 }
